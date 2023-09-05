@@ -1,0 +1,89 @@
+package br.edu.univas;
+
+import java.util.List;
+
+public class Trabalho_01 {
+
+    
+
+    // Interface principal para estatísticas
+    interface Estatistica {
+        void exibir();
+    }
+
+    static class EstatisticaFaltasCartoes implements Estatistica {
+        private final int faltas;
+        private final int cartoes;
+
+        public EstatisticaFaltasCartoes(int faltas, int cartoes) {
+            this.faltas = faltas;
+            this.cartoes = cartoes;
+        }
+
+        
+        public void exibir() {
+            System.out.println("Faltas: " + faltas + ", Cartões: " + cartoes);
+        }
+    }
+
+    static class EstatisticaGolsChutes implements Estatistica {
+        private final int gols;
+        private final int chutes;
+
+        public EstatisticaGolsChutes(int gols, int chutes) {
+            this.gols = gols;
+            this.chutes = chutes;
+        }
+
+        
+        public void exibir() {
+            System.out.println("Gols: " + gols + ", Chutes ao gol: " + chutes);
+        }
+    }
+
+    static class EstatisticaTempoJogo implements Estatistica {
+        private final int tempoTotal;
+
+        public EstatisticaTempoJogo(int tempoTotal) {
+            this.tempoTotal = tempoTotal;
+        }
+
+        
+        public void exibir() {
+            System.out.println("Tempo de jogo: " + tempoTotal + " minutos");
+        }
+    }
+
+    // Gerador de estatísticas
+    interface GeradorEstatisticas {
+        void gerarEstatisticas(Jogo jogo);
+    }
+
+    static class GeradorEstatisticasBrasileirao implements GeradorEstatisticas {
+        
+        public void gerarEstatisticas(Jogo jogo) {
+            for (Estatistica estatistica : jogo.estatisticas()) {
+                estatistica.exibir();
+            }
+        }
+    }
+
+    record Jogo(List<Estatistica> estatisticas) {
+    }
+
+    public static class Main {
+        public static void main(String[] args) {
+            List<Estatistica> estatisticas = List.of(
+                    new EstatisticaFaltasCartoes(12, 3),
+                    new EstatisticaGolsChutes(3, 8),
+                    new EstatisticaTempoJogo(95)
+            );
+
+            Jogo jogo = new Jogo(estatisticas);
+
+            GeradorEstatisticas gerador = new GeradorEstatisticasBrasileirao();
+            gerador.gerarEstatisticas(jogo);
+        }
+    }
+
+}
